@@ -58,15 +58,15 @@ func InitHTTPHandler(cnf config.Config, uc usecase.IFaceUsecase) http.Handler {
 					profile.Get("/", h.GetProfileAdmin)
 				})
 
-				// private.Route("/merchants", func(merchant chi.Router) {
-				// 	merchant.Post("/", h.CreateMerchant)
-				// 	merchant.Get("/", h.GetListMerchant)
+				private.Route("/merchants", func(merchant chi.Router) {
+					merchant.Post("/", h.CreateMerchant)
+					// 	merchant.Get("/", h.GetListMerchant)
 
-				// 	merchant.Route("/{merchantID}/items", func(item chi.Router) {
-				// 		item.Post("/", h.CreateMerchantItem)
-				// 		item.Get("/", h.GetListMerchantItem)
-				// 	})
-				// })
+					// 	merchant.Route("/{merchantID}/items", func(item chi.Router) {
+					// 		item.Post("/", h.CreateMerchantItem)
+					// 		item.Get("/", h.GetListMerchantItem)
+					// 	})
+				})
 			})
 		})
 

@@ -13,4 +13,7 @@ type IFaceRepository interface {
 	CreateUser(ctx context.Context, data *model.User) error
 	FindOneUserByUsernameAndRole(ctx context.Context, username string, role constant.Role) (*model.User, error)
 	FindOneUserByID(ctx context.Context, userID uuid.UUID) (*model.User, error)
+
+	// merchant
+	CreateMerchant(ctx context.Context, data *model.Merchant) error
 }

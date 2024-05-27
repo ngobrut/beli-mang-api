@@ -18,4 +18,7 @@ type IFaceUsecase interface {
 
 	// image
 	UploadImage(ctx context.Context, file *multipart.FileHeader) (*response.ImageResponse, error)
+
+	// merchant
+	CreateMerchant(ctx context.Context, req *request.CreateMerchant) (*response.CreateMerchant, error)
 }

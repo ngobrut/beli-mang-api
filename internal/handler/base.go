@@ -7,6 +7,8 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
+	"strings"
 
 	"github.com/go-playground/locales/en"
 	ut "github.com/go-playground/universal-translator"
@@ -56,6 +58,10 @@ func (h Handler) ValidateStruct(r *http.Request, data interface{}) error {
 	uni := ut.New(eng, eng)
 	trans, _ := uni.GetTranslator("en")
 	_ = en_translations.RegisterDefaultTranslations(validate, trans)
+	validate.RegisterValidation("merchantCategory", validateMerchantCategory)
+	validate.RegisterValidation("validUrl", validateURL)
+	validate.RegisterValidation("lat", validateLat)
+	validate.RegisterValidation("long", validateLong)
 
 	err = validate.Struct(data)
 	if err == nil {
@@ -66,6 +72,16 @@ func (h Handler) ValidateStruct(r *http.Request, data interface{}) error {
 	var details = make([]string, 0)
 	for _, field := range err.(validator.ValidationErrors) {
 		message = field.Translate(trans)
+		switch field.Tag() {
+		case "merchantCategory":
+			message = fmt.Sprintf("%s must be one of [%s]", field.Field(), strings.Join(constant.MerchantCategories, ", "))
+		case "validUrl":
+			message = "image_url should be url"
+		case "lat":
+			message = "lat should be in latitude format"
+		case "long":
+			message = "long should be in longitude format"
+		}
 		details = append(details, message)
 	}
 
@@ -76,6 +92,51 @@ func (h Handler) ValidateStruct(r *http.Request, data interface{}) error {
 	}
 
 	return err
+}
+
+func validateMerchantCategory(fl validator.FieldLevel) bool {
+	return constant.ValidMerchantCategory[fl.Field().String()]
+}
+
+func validateURL(fl validator.FieldLevel) bool {
+	parsedURL, err := url.Parse(fl.Field().String())
+	if err != nil {
+		return false
+	}
+
+	// Check if the scheme is present and it's http or https
+	if parsedURL.Scheme != "http" && parsedURL.Scheme != "https" {
+		return false
+	}
+
+	// Check if the host is present and it has a valid format
+	if parsedURL.Host == "" {
+		return false
+	}
+
+	// Check if the host has a valid domain format
+	parts := strings.Split(parsedURL.Host, ".")
+	if len(parts) < 2 {
+		return false
+	}
+
+	// Check if the path, if present, is in a valid format
+	if parsedURL.Path != "" && !strings.HasPrefix(parsedURL.Path, "/") {
+		return false
+	}
+
+	// All checks passed, URL is valid
+	return true
+}
+
+func validateLat(fl validator.FieldLevel) bool {
+	lat := fl.Field().Float()
+	return lat >= -90 && lat <= 90
+}
+
+func validateLong(fl validator.FieldLevel) bool {
+	long := fl.Field().Float()
+	return long >= -180 && long <= 180
 }
 
 func (h Handler) ResponseOK(w http.ResponseWriter, code int, data interface{}) {
