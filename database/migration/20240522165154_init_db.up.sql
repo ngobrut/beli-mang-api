@@ -27,7 +27,8 @@ CREATE TABLE IF NOT EXISTS merchants (
     merchant_category varchar(30) NOT NULL,
     image_url text NOT NULL,
     lat DECIMAL(9,6) NOT NULL,
-    long DECIMAL(12,9) NOT NULL
+    long DECIMAL(12,9) NOT NULL,
+    created_at timestamp DEFAULT NOW()
 );
 
 CREATE INDEX IF NOT EXISTS merchant_name_idx ON merchants (name);
@@ -43,6 +44,7 @@ CREATE TABLE IF NOT EXISTS products (
     product_category varchar(30) NOT NULL,
     price int NOT NULL,
     image_url text NOT NULL,
+    created_at timestamp DEFAULT NOW(),
     CONSTRAINT product_merchant_fk foreign key (merchant_id) references merchants (merchant_id)
 );
 
@@ -56,6 +58,7 @@ CREATE TABLE IF NOT EXISTS invoices (
     estimated_id uuid DEFAULT gen_random_uuid() NOT NULL,
     order_id uuid NULL,
     user_id uuid NOT NULL,
+    created_at timestamp DEFAULT NOW(),
     CONSTRAINT invoice_user_fk foreign key (user_id) references users (user_id)
 );
 
@@ -68,6 +71,7 @@ CREATE TABLE IF NOT EXISTS invoice_marchants (
 	invoice_id int NOT NULL,
 	merchant_id uuid NOT NULL,
 	is_starting_point bool NOT NULL,
+    created_at timestamp DEFAULT NOW(),
     CONSTRAINT invoice_marchant_invoice_fk foreign key (invoice_id) references invoices (id),
     CONSTRAINT invoice_marchant_merchant_fk foreign key (merchant_id) references merchants (merchant_id)
 );
@@ -83,6 +87,7 @@ CREATE TABLE IF NOT EXISTS invoice_merchant_products (
 	quantity int not null,
 	price int not null,
 	total_price int not null,
+    created_at timestamp DEFAULT NOW(),
     CONSTRAINT invoice_marchant_product_im_fk foreign key (invoice_merchant_id) references invoice_marchants (id),
     CONSTRAINT invoice_marchant_product_p_fk foreign key (product_id) references products (product_id)
 );
