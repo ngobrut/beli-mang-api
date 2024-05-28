@@ -13,3 +13,9 @@ type ErrorResponse struct {
 	Message string   `json:"message"`
 	Details []string `json:"details,omitempty"`
 }
+
+type Meta struct {
+	Limit  int `json:"limit"`
+	Offset int `json:"offset"`
+	Total  int `json:"total"`
+}

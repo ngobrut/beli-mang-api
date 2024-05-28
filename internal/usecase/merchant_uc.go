@@ -2,7 +2,10 @@ package usecase
 
 import (
 	"context"
+	"net/http"
 
+	"github.com/ngobrut/beli-mang-api/constant"
+	"github.com/ngobrut/beli-mang-api/internal/custom_error"
 	"github.com/ngobrut/beli-mang-api/internal/model"
 	"github.com/ngobrut/beli-mang-api/internal/types/request"
 	"github.com/ngobrut/beli-mang-api/internal/types/response"
@@ -29,4 +32,17 @@ func (u *Usecase) CreateMerchant(ctx context.Context, req *request.CreateMerchan
 
 	return res, nil
 
+}
+
+// GetListMerchant implements IFaceUsecase.
+func (u *Usecase) GetListMerchant(ctx context.Context, params *request.ListMerchantQuery) ([]*response.ListMerchant, *response.Meta, error) {
+	res, meta, err := u.repo.FindMerchants(ctx, params)
+	if err != nil {
+		return nil, nil, custom_error.SetCustomError(&custom_error.ErrorContext{
+			HTTPCode: http.StatusInternalServerError,
+			Message:  constant.HTTPStatusText(http.StatusInternalServerError),
+		})
+	}
+
+	return res, meta, nil
 }

@@ -21,4 +21,5 @@ type IFaceUsecase interface {
 
 	// merchant
 	CreateMerchant(ctx context.Context, req *request.CreateMerchant) (*response.CreateMerchant, error)
+	GetListMerchant(ctx context.Context, params *request.ListMerchantQuery) ([]*response.ListMerchant, *response.Meta, error)
 }

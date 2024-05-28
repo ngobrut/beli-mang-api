@@ -13,3 +13,12 @@ type CreateMerchant struct {
 	ImageUrl         string                    `json:"imageUrl" validate:"required,validUrl"`
 	Location         Location                  `json:"location" validate:"required"`
 }
+
+type ListMerchantQuery struct {
+	MerchantID       *string
+	Limit            *int
+	Offset           *int
+	Name             *string
+	MerchantCategory *string
+	CreatedAt        *string
+}

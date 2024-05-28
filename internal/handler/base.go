@@ -139,6 +139,13 @@ func validateLong(fl validator.FieldLevel) bool {
 	return long >= -180 && long <= 180
 }
 
+func StringPtr(s string) *string {
+	if s == "" {
+		return nil
+	}
+	return &s
+}
+
 func (h Handler) ResponseOK(w http.ResponseWriter, code int, data interface{}, meta interface{}) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(code)
