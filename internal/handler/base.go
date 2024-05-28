@@ -139,14 +139,24 @@ func validateLong(fl validator.FieldLevel) bool {
 	return long >= -180 && long <= 180
 }
 
-func (h Handler) ResponseOK(w http.ResponseWriter, code int, data interface{}) {
+func (h Handler) ResponseOK(w http.ResponseWriter, code int, data interface{}, meta interface{}) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(code)
-	json.NewEncoder(w).Encode(response.JsonResponse{
-		Success: true,
-		Message: "Success",
-		Data:    data,
-	})
+	if meta == nil {
+		json.NewEncoder(w).Encode(response.JsonResponse{
+			Success: true,
+			Message: "Success",
+			Data:    data,
+		})
+	} else {
+		json.NewEncoder(w).Encode(response.JsonResponse{
+			Success: true,
+			Message: "Success",
+			Data:    data,
+			Meta:    meta,
+		})
+	}
+
 }
 
 func (h Handler) ResponseError(w http.ResponseWriter, err error) {

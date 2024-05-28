@@ -25,7 +25,7 @@ func (h *Handler) RegisterUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	h.ResponseOK(w, http.StatusCreated, res)
+	h.ResponseOK(w, http.StatusCreated, res, nil)
 }
 
 func (h *Handler) LoginUser(w http.ResponseWriter, r *http.Request) {
@@ -44,7 +44,7 @@ func (h *Handler) LoginUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	h.ResponseOK(w, http.StatusOK, res)
+	h.ResponseOK(w, http.StatusOK, res, nil)
 }
 
 func (h *Handler) GetProfileUser(w http.ResponseWriter, r *http.Request) {
@@ -61,5 +61,5 @@ func (h *Handler) GetProfileUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	h.ResponseOK(w, http.StatusOK, res)
+	h.ResponseOK(w, http.StatusOK, res, nil)
 }

@@ -26,5 +26,5 @@ func (h *Handler) GetListNearbyMerchants(w http.ResponseWriter, r *http.Request)
 
 	// todo:
 
-	h.ResponseOK(w, http.StatusOK, nil)
+	h.ResponseOK(w, http.StatusOK, nil, nil)
 }

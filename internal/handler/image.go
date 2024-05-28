@@ -67,5 +67,5 @@ func (h Handler) UploadImage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	h.ResponseOK(w, http.StatusOK, res)
+	h.ResponseOK(w, http.StatusOK, res, nil)
 }

@@ -25,7 +25,7 @@ func (h *Handler) RegisterAdmin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	h.ResponseOK(w, http.StatusCreated, res)
+	h.ResponseOK(w, http.StatusCreated, res, nil)
 }
 
 func (h *Handler) LoginAdmin(w http.ResponseWriter, r *http.Request) {
@@ -44,7 +44,7 @@ func (h *Handler) LoginAdmin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	h.ResponseOK(w, http.StatusOK, res)
+	h.ResponseOK(w, http.StatusOK, res, nil)
 }
 
 func (h *Handler) GetProfileAdmin(w http.ResponseWriter, r *http.Request) {
@@ -61,5 +61,5 @@ func (h *Handler) GetProfileAdmin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	h.ResponseOK(w, http.StatusOK, res)
+	h.ResponseOK(w, http.StatusOK, res, nil)
 }
