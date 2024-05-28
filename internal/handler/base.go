@@ -59,6 +59,7 @@ func (h Handler) ValidateStruct(r *http.Request, data interface{}) error {
 	trans, _ := uni.GetTranslator("en")
 	_ = en_translations.RegisterDefaultTranslations(validate, trans)
 	validate.RegisterValidation("merchantCategory", validateMerchantCategory)
+	validate.RegisterValidation("productCategory", validateProductCategory)
 	validate.RegisterValidation("validUrl", validateURL)
 	validate.RegisterValidation("lat", validateLat)
 	validate.RegisterValidation("long", validateLong)
@@ -75,6 +76,8 @@ func (h Handler) ValidateStruct(r *http.Request, data interface{}) error {
 		switch field.Tag() {
 		case "merchantCategory":
 			message = fmt.Sprintf("%s must be one of [%s]", field.Field(), strings.Join(constant.MerchantCategories, ", "))
+		case "productCategory":
+			message = fmt.Sprintf("%s must be one of [%s]", field.Field(), strings.Join(constant.ProductCategories, ", "))
 		case "validUrl":
 			message = "image_url should be url"
 		case "lat":
@@ -96,6 +99,10 @@ func (h Handler) ValidateStruct(r *http.Request, data interface{}) error {
 
 func validateMerchantCategory(fl validator.FieldLevel) bool {
 	return constant.ValidMerchantCategory[fl.Field().String()]
+}
+
+func validateProductCategory(fl validator.FieldLevel) bool {
+	return constant.ValidProductCategory[fl.Field().String()]
 }
 
 func validateURL(fl validator.FieldLevel) bool {

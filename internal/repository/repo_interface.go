@@ -19,4 +19,7 @@ type IFaceRepository interface {
 	// merchant
 	CreateMerchant(ctx context.Context, data *model.Merchant) error
 	FindMerchants(ctx context.Context, params *request.ListMerchantQuery) ([]*response.ListMerchant, *response.Meta, error)
+
+	// product
+	CreateProduct(ctx context.Context, data *model.Product) error
 }
