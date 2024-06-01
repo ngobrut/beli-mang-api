@@ -64,7 +64,7 @@ func InitHTTPHandler(cnf config.Config, uc usecase.IFaceUsecase) http.Handler {
 
 					merchant.Route("/{merchantId}/items", func(item chi.Router) {
 						item.Post("/", h.CreateProduct)
-						// item.Get("/", h.GetListMerchantItem)
+						item.Get("/", h.GetListProduct)
 					})
 				})
 			})

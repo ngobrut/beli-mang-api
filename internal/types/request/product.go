@@ -12,3 +12,13 @@ type CreateProduct struct {
 	ImageUrl        string                   `json:"imageUrl" validate:"required,validUrl"`
 	MerchantID      uuid.UUID                `json:"-"`
 }
+
+type ListProductQuery struct {
+	ProductID       *string   `json:"itemId"`
+	Limit           *int      `json:"limit"`
+	Offset          *int      `json:"offset"`
+	Name            *string   `json:"name"`
+	ProductCategory *string   `json:"productCategory"`
+	CreatedAt       *string   `json:"createdAt"`
+	MerchantID      uuid.UUID `json:"-"`
+}

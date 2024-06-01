@@ -3,10 +3,13 @@ package repository
 import (
 	"context"
 	"fmt"
+	"net/http"
 	"strings"
 
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
+	"github.com/ngobrut/beli-mang-api/constant"
+	"github.com/ngobrut/beli-mang-api/internal/custom_error"
 	"github.com/ngobrut/beli-mang-api/internal/model"
 	"github.com/ngobrut/beli-mang-api/internal/types/request"
 	"github.com/ngobrut/beli-mang-api/internal/types/response"
@@ -38,6 +41,33 @@ func (r *Repository) CreateMerchant(ctx context.Context, data *model.Merchant) e
 
 }
 
+// FindOneMerchantByID implements IFaceRepository.
+func (r *Repository) FindOneMerchantByID(ctx context.Context, ID *uuid.UUID) (*model.Merchant, error) {
+	merchant := &model.Merchant{}
+	query := `SELECT * FROM merchants WHERE merchant_id = $1`
+	err := r.db.QueryRow(ctx, query, ID).Scan(
+		&merchant.MerchantID,
+		&merchant.Name,
+		&merchant.MerchantCategory,
+		&merchant.ImageUrl,
+		&merchant.Lat,
+		&merchant.Long,
+		&merchant.CreatedAt,
+	)
+	if err != nil {
+		if err == pgx.ErrNoRows {
+			return nil, custom_error.SetCustomError(&custom_error.ErrorContext{
+				HTTPCode: http.StatusNotFound,
+				Message:  constant.HTTPStatusText(http.StatusNotFound),
+			})
+		}
+
+		return nil, err
+	}
+	return merchant, nil
+
+}
+
 // GetListMerchant implements IFaceRepository.
 func (r *Repository) FindMerchants(ctx context.Context, params *request.ListMerchantQuery) ([]*response.ListMerchant, *response.Meta, error) {
 	query := `SELECT 
@@ -45,6 +75,7 @@ func (r *Repository) FindMerchants(ctx context.Context, params *request.ListMerc
         merchant_id,
         name,
         merchant_category,
+        image_url,
         lat,
         long,
         TO_CHAR(created_at, 'YYYY-MM-DD HH24:MI:SS.US') as created_at
@@ -70,7 +101,7 @@ func (r *Repository) FindMerchants(ctx context.Context, params *request.ListMerc
 
 	} else {
 		if params.MerchantCategory != nil {
-			clause = append(clause, fmt.Sprintf(" phone = $%d", counter))
+			clause = append(clause, fmt.Sprintf(" merchant_category = $%d", counter))
 			args = append(args, *params.MerchantCategory)
 			counter++
 		}
@@ -133,6 +164,7 @@ func (r *Repository) FindMerchants(ctx context.Context, params *request.ListMerc
 			&m.MerchantID,
 			&m.Name,
 			&m.MerchantCategory,
+			&m.ImageUrl,
 			&m.Location.Lat,
 			&m.Location.Long,
 			&m.CreatedAt,

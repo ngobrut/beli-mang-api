@@ -18,6 +18,7 @@ type ListMerchant struct {
 	MerchantID       uuid.UUID                 `json:"merchantId" db:"merchant_id"`
 	Name             string                    `json:"name" db:"name"`
 	MerchantCategory constant.MerchantCategory `json:"merchantCategory" db:"merchant_category"`
+	ImageUrl         string                    `json:"imageUrl" db:"image_url"`
 	Location         Location                  `json:"location" db:"-"`
 	CreatedAt        string                    `json:"createdAt" db:"created_at"`
 }
